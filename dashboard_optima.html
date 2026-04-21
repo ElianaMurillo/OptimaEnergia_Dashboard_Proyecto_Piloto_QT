@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Piloto Energético – Optima Energía</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0f0e;
+    --surface: #111714;
+    --surface2: #161d1a;
+    --border: #1e2a25;
+    --green: #2dda7f;
+    --green-dim: #1a8f50;
+    --green-pale: rgba(45,218,127,0.08);
+    --amber: #f5c842;
+    --red: #ff5e5e;
+    --text: #e8f0ec;
+    --text-muted: #7a9a87;
+    --text-dim: #3d5447;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(11,15,14,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(16px, 4vw, 48px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.02em;
+    color: var(--green);
+  }
+
+  .nav-logo span { color: var(--text-muted); font-weight: 400; }
+
+  .nav-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    background: var(--green-pale);
+    border: 1px solid var(--green-dim);
+    color: var(--green);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    padding: clamp(40px, 6vw, 80px) clamp(16px, 4vw, 48px) clamp(24px, 4vw, 48px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: -60px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(45,218,127,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    max-width: 700px;
+    margin-bottom: 16px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--green);
+  }
+
+  .hero-sub {
+    color: var(--text-muted);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    max-width: 560px;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+
+  .hero-meta span { color: var(--text-muted); }
+
+  /* KPI ROW */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 0 clamp(16px, 4vw, 48px) clamp(32px, 4vw, 48px);
+  }
+
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .kpi:hover { border-color: var(--green-dim); }
+
+  .kpi::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .kpi:hover::after { opacity: 1; }
+
+  .kpi-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .kpi-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .kpi-value.accent { color: var(--green); }
+  .kpi-value.amber { color: var(--amber); }
+
+  .kpi-sub {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+  }
+
+  /* SECTION */
+  section {
+    padding: 0 clamp(16px, 4vw, 48px) clamp(40px, 5vw, 64px);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    letter-spacing: -0.02em;
+  }
+
+  .section-note {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  /* CHART */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: clamp(16px, 3vw, 28px);
+    position: relative;
+  }
+
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .legend-line {
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+  }
+
+  .legend-line.baseline {
+    background: var(--amber);
+    border: none;
+  }
+
+  .legend-line.measured {
+    background: var(--green);
+  }
+
+  .legend-line.measured.dashed {
+    background: repeating-linear-gradient(90deg, var(--green) 0, var(--green) 6px, transparent 6px, transparent 10px);
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: clamp(260px, 40vw, 380px);
+  }
+
+  /* PHASE LABELS */
+  .phase-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .phase-tag {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .phase-tag.p1 { background: rgba(45,218,127,0.1); color: var(--green); border: 1px solid rgba(45,218,127,0.25); }
+  .phase-tag.p2 { background: rgba(245,200,66,0.1); color: var(--amber); border: 1px solid rgba(245,200,66,0.25); }
+  .phase-tag.p3 { background: rgba(255,94,94,0.1); color: #ff8c8c; border: 1px solid rgba(255,94,94,0.2); }
+
+  /* BEFORE AFTER */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .ba-grid { grid-template-columns: 1fr; }
+  }
+
+  .ba-col { display: flex; flex-direction: column; gap: 16px; }
+
+  .ba-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .ba-header.before {
+    background: rgba(255,94,94,0.08);
+    border: 1px solid rgba(255,94,94,0.2);
+    color: #ff8c8c;
+  }
+
+  .ba-header.after {
+    background: rgba(45,218,127,0.08);
+    border: 1px solid rgba(45,218,127,0.2);
+    color: var(--green);
+  }
+
+  .ba-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .ba-dot.before { background: #ff8c8c; }
+  .ba-dot.after { background: var(--green); }
+
+  .photo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .photo-card:hover { border-color: var(--green-dim); }
+
+  .photo-placeholder {
+    aspect-ratio: 4/3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    background: var(--surface2);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .photo-placeholder:hover { background: #1a2420; }
+
+  .photo-placeholder input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+
+  .photo-placeholder svg {
+    width: 32px; height: 32px;
+    opacity: 0.35;
+  }
+
+  .photo-placeholder img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .photo-meta {
+    padding: 12px 16px;
+  }
+
+  .photo-location {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .lux-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .lux-val {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--text);
+  }
+
+  .lux-val.before-lux { color: #ff8c8c; }
+  .lux-val.after-lux { color: var(--green); }
+
+  .lux-unit {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* SENSOR SECTION */
+  .sensor-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 700px) {
+    .sensor-grid { grid-template-columns: 1fr; }
+  }
+
+  .sensor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+
+  .sensor-card:hover {
+    border-color: var(--green-dim);
+    transform: translateY(-2px);
+  }
+
+  .sensor-head {
+    background: var(--surface2);
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sensor-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .sensor-badge.standard {
+    background: rgba(245,200,66,0.1);
+    color: var(--amber);
+    border: 1px solid rgba(245,200,66,0.3);
+  }
+
+  .sensor-badge.extended {
+    background: rgba(45,218,127,0.1);
+    color: var(--green);
+    border: 1px solid rgba(45,218,127,0.3);
+  }
+
+  .sensor-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 4px;
+  }
+
+  .sensor-desc {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .sensor-body {
+    padding: 18px 20px;
+  }
+
+  /* SVG CONE DIAGRAM */
+  .cone-diagram {
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto 16px;
+    display: block;
+  }
+
+  .sensor-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .spec-item {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .spec-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .spec-value {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text);
+  }
+
+  .spec-value.highlight { color: var(--green); }
+
+  /* ALERT BOX */
+  .alert-box {
+    background: rgba(255,94,94,0.06);
+    border: 1px solid rgba(255,94,94,0.2);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-top: 20px;
+  }
+
+  .alert-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+    line-height: 1.4;
+  }
+
+  .alert-text {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .alert-title {
+    font-weight: 600;
+    color: #ff8c8c;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+  }
+
+  .solution-box {
+    background: rgba(45,218,127,0.05);
+    border: 1px solid rgba(45,218,127,0.15);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    margin-top: 12px;
+  }
+
+  .solution-text {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  .solution-title {
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+  }
+
+  /* HEIGHT ILLUSTRATION */
+  .height-compare {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .height-compare-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px clamp(16px, 4vw, 48px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-brand {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--green);
+  }
+
+  .footer-note {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+  }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0 clamp(16px, 4vw, 48px) clamp(32px, 4vw, 48px);
+  }
+
+  /* ANIMATE */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-up {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .fade-up:nth-child(1) { animation-delay: 0.05s; }
+  .fade-up:nth-child(2) { animation-delay: 0.1s; }
+  .fade-up:nth-child(3) { animation-delay: 0.15s; }
+  .fade-up:nth-child(4) { animation-delay: 0.2s; }
+
+  /* TOOLTIP */
+  canvas { cursor: crosshair; }
+
+  /* RESPONSIVE TWEAKS */
+  @media (max-width: 480px) {
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .sensor-specs { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Optima<span>Energía</span></div>
+  <div class="nav-badge">Informe Piloto</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero fade-up">
+  <div class="hero-label">Prueba Piloto · Agosto – Septiembre 2025</div>
+  <h1>Resultados del<br><em>piloto energético</em></h1>
+  <p class="hero-sub">Este informe consolida los datos reales del medidor instalado durante la prueba piloto. Aquí encontrará el consumo registrado hora a hora, la comparación con la línea base anterior y el análisis del sistema de iluminación implementado.</p>
+  <div class="hero-meta">
+    <div>Período: <span>13 ago – 29 sep 2025</span></div>
+    <div>Duración: <span>48 días</span></div>
+    <div>Frecuencia: <span>Registros horarios</span></div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="kpi-row">
+  <div class="kpi fade-up">
+    <div class="kpi-label">Línea base (anterior)</div>
+    <div class="kpi-value amber">116,6</div>
+    <div class="kpi-sub">kWh / día promedio</div>
+  </div>
+  <div class="kpi fade-up">
+    <div class="kpi-label">Consumo promedio piloto</div>
+    <div class="kpi-value">58,4</div>
+    <div class="kpi-sub">kWh / día promedio</div>
+  </div>
+  <div class="kpi fade-up">
+    <div class="kpi-label">Ahorro estimado</div>
+    <div class="kpi-value accent">~50%</div>
+    <div class="kpi-sub">vs sistema anterior</div>
+  </div>
+  <div class="kpi fade-up">
+    <div class="kpi-label">Equipos reemplazados</div>
+    <div class="kpi-value">28</div>
+    <div class="kpi-sub">12 × 165 W + 16 × 180 W</div>
+  </div>
+</div>
+
+<!-- CHART -->
+<section>
+  <div class="section-header">
+    <div class="section-title">Consumo diario registrado</div>
+    <div class="section-note">kWh por día · medidor instalado in situ</div>
+  </div>
+  <div class="chart-card">
+    <div class="chart-legend">
+      <div class="legend-item">
+        <div class="legend-line baseline"></div>
+        <span>Línea base (antes: 116,6 kWh/día)</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line measured"></div>
+        <span>Consumo medido (nuevo sistema)</span>
+      </div>
+    </div>
+    <div class="chart-wrapper">
+      <canvas id="energyChart"></canvas>
+    </div>
+    <div class="phase-tags">
+      <span class="phase-tag p1">⚡ 13–29 ago: Arranque del sistema</span>
+      <span class="phase-tag p2">🔄 30 ago–5 sep: Transición / ajuste</span>
+      <span class="phase-tag p3">✅ 6–29 sep: Operación con nuevos equipos</span>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- BEFORE / AFTER LUXES -->
+<section>
+  <div class="section-header">
+    <div class="section-title">Niveles de iluminación: Antes vs Después</div>
+    <div class="section-note">Mediciones en luxes – mismos puntos de referencia</div>
+  </div>
+
+  <div class="ba-grid">
+    <!-- ANTES -->
+    <div class="ba-col">
+      <div class="ba-header before">
+        <div class="ba-dot before"></div>
+        Antes de la intervención
+      </div>
+
+      <div class="photo-card">
+        <div class="photo-placeholder" id="ph-before-1" title="Clic para agregar foto">
+          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-before-1')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+          </svg>
+          <span>Agregar foto antes #1</span>
+        </div>
+        <div class="photo-meta">
+          <div class="photo-location">Zona / Punto A</div>
+          <div class="lux-row">
+            <span class="lux-val before-lux" id="lux-b1" onclick="editLux(this)">— </span>
+            <span class="lux-unit">lux · (clic para editar)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card">
+        <div class="photo-placeholder" id="ph-before-2" title="Clic para agregar foto">
+          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-before-2')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+          </svg>
+          <span>Agregar foto antes #2</span>
+        </div>
+        <div class="photo-meta">
+          <div class="photo-location">Zona / Punto B</div>
+          <div class="lux-row">
+            <span class="lux-val before-lux" id="lux-b2" onclick="editLux(this)">— </span>
+            <span class="lux-unit">lux · (clic para editar)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DESPUÉS -->
+    <div class="ba-col">
+      <div class="ba-header after">
+        <div class="ba-dot after"></div>
+        Después de la intervención
+      </div>
+
+      <div class="photo-card">
+        <div class="photo-placeholder" id="ph-after-1" title="Clic para agregar foto">
+          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-after-1')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+          </svg>
+          <span>Agregar foto después #1</span>
+        </div>
+        <div class="photo-meta">
+          <div class="photo-location">Zona / Punto A</div>
+          <div class="lux-row">
+            <span class="lux-val after-lux" id="lux-a1" onclick="editLux(this)">— </span>
+            <span class="lux-unit">lux · (clic para editar)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-card">
+        <div class="photo-placeholder" id="ph-after-2" title="Clic para agregar foto">
+          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-after-2')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3.5"/>
+            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+          </svg>
+          <span>Agregar foto después #2</span>
+        </div>
+        <div class="photo-meta">
+          <div class="photo-location">Zona / Punto B</div>
+          <div class="lux-row">
+            <span class="lux-val after-lux" id="lux-a2" onclick="editLux(this)">— </span>
+            <span class="lux-unit">lux · (clic para editar)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SENSORES -->
+<section>
+  <div class="section-header">
+    <div class="section-title">Sistema de sensores de presencia</div>
+    <div class="section-note">Detección adaptada a la altura de montaje</div>
+  </div>
+
+  <div class="sensor-grid">
+
+    <!-- SENSOR 15m -->
+    <div class="sensor-card">
+      <div class="sensor-head">
+        <div class="sensor-badge standard">Estándar</div>
+        <div class="sensor-name">Sensor para altura hasta 15 m</div>
+        <div class="sensor-desc">Detecta presencia a nivel de piso en instalaciones medianas</div>
+      </div>
+      <div class="sensor-body">
+        <!-- SVG Cone 15m -->
+        <svg class="cone-diagram" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+          <!-- ceiling -->
+          <rect x="60" y="0" width="100" height="8" rx="3" fill="#1e2a25"/>
+          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Luminaria</text>
+          <!-- fixture -->
+          <rect x="95" y="8" width="30" height="10" rx="2" fill="#2a3d32"/>
+          <circle cx="110" cy="13" r="5" fill="#f5c842" opacity="0.7"/>
+
+          <!-- detection cone 15m (narrower) -->
+          <polygon points="110,18 68,155 152,155" fill="rgba(245,200,66,0.07)" stroke="#f5c842" stroke-width="1" stroke-dasharray="4,3"/>
+
+          <!-- height arrow -->
+          <line x1="40" y1="18" x2="40" y2="155" stroke="#3d5447" stroke-width="1"/>
+          <line x1="34" y1="18" x2="46" y2="18" stroke="#3d5447" stroke-width="1"/>
+          <line x1="34" y1="155" x2="46" y2="155" stroke="#3d5447" stroke-width="1"/>
+          <text x="33" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="DM Sans" transform="rotate(-90,33,92)">≤ 15 m</text>
+
+          <!-- person -->
+          <circle cx="110" cy="148" r="5" fill="#f5c842" opacity="0.8"/>
+          <line x1="110" y1="153" x2="110" y2="165" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
+          <line x1="110" y1="157" x2="104" y2="162" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
+          <line x1="110" y1="157" x2="116" y2="162" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
+
+          <!-- detection ok badge -->
+          <circle cx="155" cy="148" r="10" fill="rgba(245,200,66,0.15)" stroke="#f5c842" stroke-width="1"/>
+          <text x="155" y="152" text-anchor="middle" fill="#f5c842" font-size="10">✓</text>
+
+          <!-- floor line -->
+          <line x1="50" y1="168" x2="170" y2="168" stroke="#1e2a25" stroke-width="2"/>
+
+          <!-- width label -->
+          <line x1="68" y1="172" x2="152" y2="172" stroke="#3d5447" stroke-width="1"/>
+          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Cono de detección</text>
+        </svg>
+
+        <div class="sensor-specs">
+          <div class="spec-item">
+            <div class="spec-label">Altura máx.</div>
+            <div class="spec-value">15 m</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ángulo detección</div>
+            <div class="spec-value">360°</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Tecnología</div>
+            <div class="spec-value" style="font-size:0.8rem">PIR / Microondas</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ideal para</div>
+            <div class="spec-value" style="font-size:0.8rem">Bodegas / oficinas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENSOR 20m -->
+    <div class="sensor-card">
+      <div class="sensor-head">
+        <div class="sensor-badge extended">Alta Altura</div>
+        <div class="sensor-name">Sensor para altura hasta 20 m</div>
+        <div class="sensor-desc">Diseñado para naves industriales de gran altura de montaje</div>
+      </div>
+      <div class="sensor-body">
+        <!-- SVG Cone 20m -->
+        <svg class="cone-diagram" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
+          <!-- ceiling -->
+          <rect x="60" y="0" width="100" height="8" rx="3" fill="#1e2a25"/>
+          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Luminaria</text>
+          <!-- fixture -->
+          <rect x="95" y="8" width="30" height="10" rx="2" fill="#1a3328"/>
+          <circle cx="110" cy="13" r="5" fill="#2dda7f" opacity="0.8"/>
+
+          <!-- detection cone 20m (wider spread) -->
+          <polygon points="110,18 48,155 172,155" fill="rgba(45,218,127,0.07)" stroke="#2dda7f" stroke-width="1" stroke-dasharray="4,3"/>
+
+          <!-- inner focused beam -->
+          <polygon points="110,18 82,155 138,155" fill="rgba(45,218,127,0.05)" stroke="rgba(45,218,127,0.3)" stroke-width="0.5"/>
+
+          <!-- height arrow -->
+          <line x1="30" y1="18" x2="30" y2="155" stroke="#3d5447" stroke-width="1"/>
+          <line x1="24" y1="18" x2="36" y2="18" stroke="#3d5447" stroke-width="1"/>
+          <line x1="24" y1="155" x2="36" y2="155" stroke="#3d5447" stroke-width="1"/>
+          <text x="23" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="DM Sans" transform="rotate(-90,23,92)">hasta 20 m</text>
+
+          <!-- person -->
+          <circle cx="110" cy="148" r="5" fill="#2dda7f" opacity="0.8"/>
+          <line x1="110" y1="153" x2="110" y2="165" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
+          <line x1="110" y1="157" x2="104" y2="162" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
+          <line x1="110" y1="157" x2="116" y2="162" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
+
+          <!-- detection ok badge -->
+          <circle cx="160" cy="148" r="10" fill="rgba(45,218,127,0.15)" stroke="#2dda7f" stroke-width="1"/>
+          <text x="160" y="152" text-anchor="middle" fill="#2dda7f" font-size="10">✓</text>
+
+          <!-- floor line -->
+          <line x1="38" y1="168" x2="182" y2="168" stroke="#1e2a25" stroke-width="2"/>
+
+          <!-- width label -->
+          <line x1="48" y1="172" x2="172" y2="172" stroke="#3d5447" stroke-width="1"/>
+          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Mayor cobertura</text>
+        </svg>
+
+        <div class="sensor-specs">
+          <div class="spec-item">
+            <div class="spec-label">Altura máx.</div>
+            <div class="spec-value highlight">20 m</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ángulo detección</div>
+            <div class="spec-value highlight">360°</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Tecnología</div>
+            <div class="spec-value" style="font-size:0.8rem">PIR focalizado</div>
+          </div>
+          <div class="spec-item">
+            <div class="spec-label">Ideal para</div>
+            <div class="spec-value highlight" style="font-size:0.8rem">Naves industriales</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Alert / contexto instalación actual -->
+  <div class="alert-box">
+    <div class="alert-icon">⚠️</div>
+    <div>
+      <div class="alert-title">Contexto de esta instalación</div>
+      <div class="alert-text">
+        Las luminarias suministradas fueron instaladas a una altura superior a la recomendada para el sensor estándar incluido. Esto ha generado que el sensor no detecte el paso de personas en algunos momentos, activándose la iluminación de forma intermitente o dejando de hacerlo cuando se requiere.
+        <br><br>
+        <strong style="color: var(--text)">Esto no es un fallo del equipo:</strong> el sensor opera dentro de su especificación técnica para alturas de hasta 15 m. El factor determinante fue la altura de montaje final elegida durante la instalación.
+      </div>
+    </div>
+  </div>
+
+  <div class="solution-box">
+    <div class="alert-icon">💡</div>
+    <div>
+      <div class="solution-title">Solución disponible</div>
+      <div class="solution-text">
+        Optima Energía cuenta con sensores específicos para alturas de hasta 20 m. Para la próxima fase o para ajustar esta instalación, se puede reemplazar únicamente el módulo sensor, sin necesidad de cambiar las luminarias. Esto garantiza una detección confiable y maximiza el ahorro energético por encendido automático.
+      </div>
+    </div>
+  </div>
+
+  <!-- Height visual comparison -->
+  <div class="height-compare">
+    <div class="height-compare-title">Comparativa visual: rango de detección por altura de montaje</div>
+    <svg viewBox="0 0 500 160" style="width:100%;max-width:560px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
+      <!-- Background -->
+      <rect width="500" height="160" fill="transparent"/>
+
+      <!-- LEFT: 15m OK -->
+      <text x="110" y="15" text-anchor="middle" fill="#f5c842" font-size="10" font-family="DM Sans" font-weight="600">SENSOR ESTÁNDAR · 15 m</text>
+
+      <!-- pole 15m -->
+      <line x1="110" y1="22" x2="110" y2="110" stroke="#1e2a25" stroke-width="3"/>
+      <!-- luminaria -->
+      <rect x="98" y="18" width="24" height="8" rx="2" fill="#2a3d32"/>
+      <circle cx="110" cy="22" r="4" fill="#f5c842" opacity="0.9"/>
+      <!-- cone 15m -->
+      <polygon points="110,26 74,108 146,108" fill="rgba(245,200,66,0.1)" stroke="#f5c842" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <!-- ground -->
+      <line x1="50" y1="118" x2="170" y2="118" stroke="#1e2a25" stroke-width="2"/>
+      <!-- height line -->
+      <line x1="60" y1="22" x2="60" y2="110" stroke="#3d5447" stroke-width="0.8"/>
+      <text x="54" y="70" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans" transform="rotate(-90,54,70)">15 m</text>
+      <!-- person in cone: OK -->
+      <circle cx="110" cy="103" r="4" fill="#f5c842"/>
+      <line x1="110" y1="107" x2="110" y2="115" stroke="#f5c842" stroke-width="1.5"/>
+      <!-- check -->
+      <text x="155" y="100" fill="#f5c842" font-size="14">✓</text>
+      <text x="85" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Detecta correctamente</text>
+      <text x="135" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans"> </text>
+
+      <!-- DIVIDER -->
+      <line x1="250" y1="10" x2="250" y2="145" stroke="#1e2a25" stroke-width="1" stroke-dasharray="4,4"/>
+
+      <!-- RIGHT: Installed too high - NO detect -->
+      <text x="375" y="15" text-anchor="middle" fill="#ff8c8c" font-size="10" font-family="DM Sans" font-weight="600">SENSOR ESTÁNDAR · &gt;15 m ✗</text>
+
+      <!-- pole too high -->
+      <line x1="375" y1="22" x2="375" y2="110" stroke="#1e2a25" stroke-width="3"/>
+      <!-- luminaria higher -->
+      <rect x="363" y="18" width="24" height="8" rx="2" fill="#2a3d32"/>
+      <circle cx="375" cy="22" r="4" fill="#ff5e5e" opacity="0.7"/>
+      <!-- cone 15m but mounted at 20m - short reach -->
+      <polygon points="375,26 354,80 396,80" fill="rgba(255,94,94,0.08)" stroke="#ff5e5e" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <!-- gap indication -->
+      <line x1="370" y1="80" x2="370" y2="110" stroke="#3d5447" stroke-width="1" stroke-dasharray="2,2"/>
+      <text x="403" y="96" fill="#ff8c8c" font-size="8" font-family="DM Sans">Zona</text>
+      <text x="403" y="106" fill="#ff8c8c" font-size="8" font-family="DM Sans">ciega</text>
+      <!-- ground -->
+      <line x1="315" y1="118" x2="435" y2="118" stroke="#1e2a25" stroke-width="2"/>
+      <!-- person outside cone: NOT detected -->
+      <circle cx="375" cy="103" r="4" fill="#555" opacity="0.6"/>
+      <line x1="375" y1="107" x2="375" y2="115" stroke="#555" stroke-width="1.5" opacity="0.6"/>
+      <!-- X -->
+      <text x="420" y="100" fill="#ff5e5e" font-size="14">✗</text>
+      <text x="345" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Persona fuera del cono</text>
+    </svg>
+  </div>
+
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Optima Energía</div>
+  <div class="footer-note">Informe confidencial · Prueba piloto 2025 · Datos registrados por medidor instalado in situ</div>
+</footer>
+
+<script>
+// === DATOS ===
+const labels = [
+  "13-ago","14-ago","15-ago","16-ago","17-ago","18-ago","19-ago","20-ago",
+  "21-ago","22-ago","23-ago","24-ago","25-ago","26-ago","27-ago","28-ago",
+  "29-ago","30-ago","31-ago","1-sep","2-sep","3-sep","4-sep","5-sep",
+  "6-sep","7-sep","8-sep","9-sep","10-sep","11-sep","12-sep","13-sep",
+  "14-sep","15-sep","16-sep","17-sep","18-sep","19-sep","20-sep","21-sep",
+  "22-sep","23-sep","24-sep","25-sep","26-sep","27-sep","28-sep","29-sep"
+];
+
+const measured = [
+  20.95,70.72,70.77,70.75,70.60,70.62,70.72,70.69,
+  70.71,70.70,70.70,70.01,69.76,69.88,69.87,69.82,
+  69.79,53.28,38.80,48.19,58.44,58.89,57.76,56.64,
+  57.55,26.56,47.98,55.99,57.52,59.43,65.47,60.88,
+  33.61,58.64,60.94,61.10,62.78,60.23,61.42,36.30,
+  55.30,61.44,63.13,61.92,66.36,61.04,25.09,22.13
+];
+
+const baseline = Array(48).fill(116.64);
+
+// === CHART ===
+const ctx = document.getElementById('energyChart').getContext('2d');
+
+const gradGreen = ctx.createLinearGradient(0, 0, 0, 380);
+gradGreen.addColorStop(0, 'rgba(45,218,127,0.25)');
+gradGreen.addColorStop(1, 'rgba(45,218,127,0)');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'Línea base (anterior)',
+        data: baseline,
+        borderColor: '#f5c842',
+        borderWidth: 2,
+        borderDash: [8, 4],
+        pointRadius: 0,
+        fill: false,
+        tension: 0,
+        order: 2
+      },
+      {
+        label: 'Consumo medido',
+        data: measured,
+        borderColor: '#2dda7f',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#2dda7f',
+        pointHoverRadius: 6,
+        fill: true,
+        backgroundColor: gradGreen,
+        tension: 0.35,
+        order: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111714',
+        borderColor: '#1e2a25',
+        borderWidth: 1,
+        titleColor: '#e8f0ec',
+        bodyColor: '#7a9a87',
+        titleFont: { family: 'Syne', weight: '700', size: 13 },
+        bodyFont: { family: 'DM Sans', size: 12 },
+        padding: 12,
+        callbacks: {
+          label: ctx => {
+            const val = ctx.parsed.y;
+            const label = ctx.dataset.label;
+            if (label.includes('base')) return `  Línea base: ${val.toFixed(1)} kWh`;
+            const saving = ((116.64 - val) / 116.64 * 100).toFixed(0);
+            return [`  Consumo: ${val.toFixed(1)} kWh`, `  Ahorro vs base: ${saving}%`];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: '#1e2a25', drawBorder: false },
+        ticks: {
+          color: '#7a9a87',
+          font: { family: 'DM Sans', size: 10 },
+          maxRotation: 45,
+          maxTicksLimit: 16
+        }
+      },
+      y: {
+        grid: { color: '#1e2a25', drawBorder: false },
+        ticks: {
+          color: '#7a9a87',
+          font: { family: 'DM Sans', size: 11 },
+          callback: v => v + ' kWh'
+        },
+        min: 0,
+        max: 135
+      }
+    }
+  }
+});
+
+// === FOTO UPLOAD ===
+function loadPhoto(event, placeholderId) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const ph = document.getElementById(placeholderId);
+    // Remove text/icon
+    const svg = ph.querySelector('svg');
+    const span = ph.querySelector('span');
+    if (svg) svg.style.display = 'none';
+    if (span) span.style.display = 'none';
+    // Add image
+    let img = ph.querySelector('img');
+    if (!img) { img = document.createElement('img'); ph.appendChild(img); }
+    img.src = e.target.result;
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;';
+  };
+  reader.readAsDataURL(file);
+}
+
+// === LUX EDIT ===
+function editLux(el) {
+  const current = el.textContent.replace(/[^0-9]/g, '') || '';
+  const val = prompt('Ingresa el valor en lux:', current);
+  if (val !== null && val.trim() !== '') {
+    el.textContent = parseInt(val).toLocaleString('es-CO') + ' ';
+  }
+}
+</script>
+</body>
+</html>
