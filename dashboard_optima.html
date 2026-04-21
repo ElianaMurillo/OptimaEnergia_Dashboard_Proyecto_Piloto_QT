@@ -7,6 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
+  
+  @font-face {
+  font-family: 'HERO';
+  src: url('hero-2.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
   :root {
     --bg: #0b0f0e;
     --surface: #111714;
@@ -17,11 +25,13 @@
     --green-pale: rgba(45,218,127,0.08);
     --amber: #f5c842;
     --red: #ff5e5e;
+    --blue: #60a5fa;
     --text: #e8f0ec;
     --text-muted: #7a9a87;
     --text-dim: #3d5447;
     --radius: 14px;
     --radius-sm: 8px;
+    --font-hero: 'HERO', 'Syne', sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +39,8 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    /* CAMBIO 1: tipografía global a HERO (usa Syne como fallback) */
+    font-family: var(--font-hero);
     font-weight: 400;
     line-height: 1.6;
     min-height: 100vh;
@@ -51,14 +62,27 @@
   }
 
   .nav-logo {
-    font-family: 'Syne', sans-serif;
+    display: flex;
+    align-items: center;
+    height: 110px;
+  }
+
+  .nav-logo img {
+    height: 110px;
+    width: auto;
+    display: block;
+  }
+
+  /* Fallback texto si no hay logo */
+  .nav-logo-text {
+    font-family: var(--font-hero);
     font-weight: 800;
     font-size: 1.1rem;
     letter-spacing: -0.02em;
     color: var(--green);
   }
 
-  .nav-logo span { color: var(--text-muted); font-weight: 400; }
+  .nav-logo-text span { color: var(--text-muted); font-weight: 400; }
 
   .nav-badge {
     font-size: 0.7rem;
@@ -98,7 +122,7 @@
   }
 
   .hero h1 {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 800;
     font-size: clamp(2rem, 5vw, 3.6rem);
     line-height: 1.1;
@@ -173,7 +197,7 @@
   }
 
   .kpi-value {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: clamp(1.6rem, 3vw, 2.2rem);
     line-height: 1;
@@ -203,7 +227,7 @@
   }
 
   .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: clamp(1.1rem, 2.5vw, 1.5rem);
     letter-spacing: -0.02em;
@@ -235,6 +259,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    justify-content: center;
     font-size: 0.78rem;
     color: var(--text-muted);
   }
@@ -250,26 +275,58 @@
     border: none;
   }
 
-  .legend-line.measured {
-    background: var(--green);
-  }
-
-  .legend-line.measured.dashed {
-    background: repeating-linear-gradient(90deg, var(--green) 0, var(--green) 6px, transparent 6px, transparent 10px);
-  }
+  /* CAMBIO 2: leyendas de fases con sus colores */
+  .legend-line.phase1 { background: var(--green); }
+  .legend-line.phase2 { background: var(--amber); }
+  .legend-line.phase3 { background: var(--blue); }
 
   .chart-wrapper {
     position: relative;
     height: clamp(260px, 40vw, 380px);
   }
 
+  /* CAMBIO 3: labels antes/después sobre la gráfica */
+  .chart-label-before {
+    position: absolute;
+    top: 8px;
+    left: 2%;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 2;
+    background: rgba(11,15,14,0.75);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border-left: 2px solid var(--amber);
+  }
+
+  .chart-label-after {
+    position: absolute;
+    top: 8px;
+    right: 2%;
+    font-size: 0.65rem;
+    color: var(--green);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 2;
+    text-align: right;
+    background: rgba(11,15,14,0.75);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border-right: 2px solid var(--green);
+  }
+
   /* PHASE LABELS */
   .phase-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 14px;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+  justify-content: center;
+}
 
   .phase-tag {
     font-size: 0.7rem;
@@ -279,22 +336,25 @@
     letter-spacing: 0.04em;
   }
 
+  /* CAMBIO 2: colores de phase-tags alineados con colores de gráfica */
   .phase-tag.p1 { background: rgba(45,218,127,0.1); color: var(--green); border: 1px solid rgba(45,218,127,0.25); }
   .phase-tag.p2 { background: rgba(245,200,66,0.1); color: var(--amber); border: 1px solid rgba(245,200,66,0.25); }
-  .phase-tag.p3 { background: rgba(255,94,94,0.1); color: #ff8c8c; border: 1px solid rgba(255,94,94,0.2); }
+  .phase-tag.p3 { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.25); }
 
   /* BEFORE AFTER */
   .ba-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    gap: 24px;
   }
 
   @media (max-width: 600px) {
     .ba-grid { grid-template-columns: 1fr; }
   }
 
-  .ba-col { display: flex; flex-direction: column; gap: 16px; }
+  .ba-col { display: flex; flex-direction: column; gap: 32px; }
 
   .ba-header {
     display: flex;
@@ -302,7 +362,7 @@
     gap: 10px;
     padding: 12px 16px;
     border-radius: var(--radius-sm);
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: 0.85rem;
     letter-spacing: 0.04em;
@@ -340,8 +400,10 @@
 
   .photo-card:hover { border-color: var(--green-dim); }
 
+  /* CAMBIO 4: photo-placeholder ahora muestra imagen fija */
   .photo-placeholder {
-    aspect-ratio: 4/3;
+    height: 500px;
+    max-width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -352,24 +414,6 @@
     background: var(--surface2);
     position: relative;
     overflow: hidden;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .photo-placeholder:hover { background: #1a2420; }
-
-  .photo-placeholder input[type=file] {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-  }
-
-  .photo-placeholder svg {
-    width: 32px; height: 32px;
-    opacity: 0.35;
   }
 
   .photo-placeholder img {
@@ -378,6 +422,18 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Icono de placeholder cuando no hay imagen */
+  .photo-placeholder .ph-icon {
+    opacity: 0.25;
+    width: 40px;
+    height: 40px;
+  }
+
+  .photo-placeholder .ph-label {
+    color: var(--text-dim);
+    font-size: 0.78rem;
   }
 
   .photo-meta {
@@ -400,7 +456,7 @@
   }
 
   .lux-val {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1.3rem;
     color: var(--text);
@@ -470,7 +526,7 @@
   }
 
   .sensor-name {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1.05rem;
     margin-bottom: 4px;
@@ -516,7 +572,7 @@
   }
 
   .spec-value {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1rem;
     color: var(--text);
@@ -608,7 +664,20 @@
   }
 
   .footer-brand {
-    font-family: 'Syne', sans-serif;
+    display: flex;
+    align-items: center;
+    height: 32px;
+  }
+
+  .footer-brand img {
+    height: 90px;
+    width: auto;
+    display: block;
+  }
+
+  /* Fallback texto footer si no hay logo */
+  .footer-brand-text {
+    font-family: var(--font-hero);
     font-weight: 700;
     font-size: 0.9rem;
     color: var(--green);
@@ -654,9 +723,19 @@
 </head>
 <body>
 
-<!-- NAV -->
+<!-- =====================================================
+     NAV / HEADER
+     CAMBIO 5: reemplaza el src del img por la ruta de tu logo.
+     Si no tienes logo aún, descomenta el div .nav-logo-text
+     y comenta el img.
+     ===================================================== -->
 <nav>
-  <div class="nav-logo">Optima<span>Energía</span></div>
+  <div class="nav-logo">
+    <img src="img/logo_optima.png" alt="Optima Energía">
+    <!-- Si no tienes el archivo de logo todavía, usa esto en su lugar:
+    <div class="nav-logo-text">Optima<span>Energía</span></div>
+    -->
+  </div>
   <div class="nav-badge">Informe Piloto</div>
 </nav>
 
@@ -675,7 +754,7 @@
 <!-- KPIs -->
 <div class="kpi-row">
   <div class="kpi fade-up">
-    <div class="kpi-label">Línea base (anterior)</div>
+    <div class="kpi-label">Línea base</div>
     <div class="kpi-value amber">116,6</div>
     <div class="kpi-sub">kWh / día promedio</div>
   </div>
@@ -686,13 +765,13 @@
   </div>
   <div class="kpi fade-up">
     <div class="kpi-label">Ahorro estimado</div>
-    <div class="kpi-value accent">~50%</div>
-    <div class="kpi-sub">vs sistema anterior</div>
+    <div class="kpi-value accent">>50%</div>
+    <div class="kpi-sub">vs línea base previa a la ejecución del proyecto</div>
   </div>
   <div class="kpi fade-up">
-    <div class="kpi-label">Equipos reemplazados</div>
-    <div class="kpi-value">28</div>
-    <div class="kpi-sub">12 × 165 W + 16 × 180 W</div>
+    <div class="kpi-label">Ahorro generado</div>
+    <div class="kpi-value accent">>23%</div>
+    <div class="kpi-sub">vs sistema instalado -equipos fundidos y operando al 25%-</div>
   </div>
 </div>
 
@@ -703,19 +782,31 @@
     <div class="section-note">kWh por día · medidor instalado in situ</div>
   </div>
   <div class="chart-card">
+    <!-- CAMBIO 2: leyenda actualizada con colores por fase -->
     <div class="chart-legend">
       <div class="legend-item">
-        <div class="legend-line baseline"></div>
+        <div class="legend-line baseline" style="background:repeating-linear-gradient(90deg,#f5c842 0,#f5c842 6px,transparent 6px,transparent 10px)"></div>
         <span>Línea base (antes: 116,6 kWh/día)</span>
       </div>
       <div class="legend-item">
-        <div class="legend-line measured"></div>
-        <span>Consumo medido (nuevo sistema)</span>
+        <div class="legend-line phase1"></div>
+        <span>13–29 ago: Arranque</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line phase2"></div>
+        <span>30 ago–5 sep: Transición</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line phase3"></div>
+        <span>6–29 sep: Operación</span>
       </div>
     </div>
+
+    <!-- CAMBIO 3: labels antes/después sobre la gráfica -->
     <div class="chart-wrapper">
       <canvas id="energyChart"></canvas>
     </div>
+
     <div class="phase-tags">
       <span class="phase-tag p1">⚡ 13–29 ago: Arranque del sistema</span>
       <span class="phase-tag p2">🔄 30 ago–5 sep: Transición / ajuste</span>
@@ -726,7 +817,6 @@
 
 <hr class="divider">
 
-<!-- BEFORE / AFTER LUXES -->
 <section>
   <div class="section-header">
     <div class="section-title">Niveles de iluminación: Antes vs Después</div>
@@ -738,43 +828,52 @@
     <div class="ba-col">
       <div class="ba-header before">
         <div class="ba-dot before"></div>
-        Antes de la intervención
+        Antes del proyecto
       </div>
 
       <div class="photo-card">
-        <div class="photo-placeholder" id="ph-before-1" title="Clic para agregar foto">
-          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-before-1')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="12" r="3.5"/>
-            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
-          </svg>
-          <span>Agregar foto antes #1</span>
+        <div class="photo-placeholder" id="ph-before-1">
+          <img src="img/foto-antes-1.jpg" alt="Antes Punto A"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;flex-direction:column;align-items:center;gap:8px;color:#3d5447;">
+            <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="12" cy="12" r="3.5"/>
+              <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+            </svg>
+            <span class="ph-label">foto-antes-1.jpg</span>
+          </div>
         </div>
         <div class="photo-meta">
           <div class="photo-location">Zona / Punto A</div>
           <div class="lux-row">
-            <span class="lux-val before-lux" id="lux-b1" onclick="editLux(this)">— </span>
-            <span class="lux-unit">lux · (clic para editar)</span>
+            <!-- REEMPLAZA el número por tu valor de lux real -->
+            <span class="lux-val before-lux" id="lux-b1">84.6 </span>
+            <span class="lux-unit">lux</span>
           </div>
         </div>
       </div>
 
       <div class="photo-card">
-        <div class="photo-placeholder" id="ph-before-2" title="Clic para agregar foto">
-          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-before-2')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="12" r="3.5"/>
-            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
-          </svg>
-          <span>Agregar foto antes #2</span>
+        <div class="photo-placeholder" id="ph-before-2">
+          <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/antes-b.jpg" -->
+          <img src="img/foto-antes-2.jpg" alt="Antes Punto B"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;flex-direction:column;align-items:center;gap:8px;color:#3d5447;">
+            <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="12" cy="12" r="3.5"/>
+              <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+            </svg>
+            <span class="ph-label">foto-antes-2.jpg</span>
+          </div>
         </div>
         <div class="photo-meta">
           <div class="photo-location">Zona / Punto B</div>
           <div class="lux-row">
-            <span class="lux-val before-lux" id="lux-b2" onclick="editLux(this)">— </span>
-            <span class="lux-unit">lux · (clic para editar)</span>
+            <!-- REEMPLAZA el número por tu valor de lux real -->
+            <span class="lux-val before-lux" id="lux-b2">112.3 </span>
+            <span class="lux-unit">lux</span>
           </div>
         </div>
       </div>
@@ -784,43 +883,53 @@
     <div class="ba-col">
       <div class="ba-header after">
         <div class="ba-dot after"></div>
-        Después de la intervención
+        Después del proyecto
       </div>
 
       <div class="photo-card">
-        <div class="photo-placeholder" id="ph-after-1" title="Clic para agregar foto">
-          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-after-1')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="12" r="3.5"/>
-            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
-          </svg>
-          <span>Agregar foto después #1</span>
+        <div class="photo-placeholder" id="ph-after-1">
+          <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/despues-a.jpg" -->
+          <img src="img/foto-despues-1.jpg" alt="Después Punto A"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;flex-direction:column;align-items:center;gap:8px;color:#3d5447;">
+            <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="12" cy="12" r="3.5"/>
+              <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+            </svg>
+            <span class="ph-label">foto-despues-1.jpg</span>
+          </div>
         </div>
         <div class="photo-meta">
           <div class="photo-location">Zona / Punto A</div>
           <div class="lux-row">
-            <span class="lux-val after-lux" id="lux-a1" onclick="editLux(this)">— </span>
-            <span class="lux-unit">lux · (clic para editar)</span>
+            <!-- REEMPLAZA el número por tu valor de lux real -->
+            <span class="lux-val after-lux" id="lux-a1">188 </span>
+            <span class="lux-unit">lux</span>
           </div>
         </div>
       </div>
 
       <div class="photo-card">
-        <div class="photo-placeholder" id="ph-after-2" title="Clic para agregar foto">
-          <input type="file" accept="image/*" onchange="loadPhoto(event,'ph-after-2')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="12" r="3.5"/>
-            <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
-          </svg>
-          <span>Agregar foto después #2</span>
+        <div class="photo-placeholder" id="ph-after-2">
+          <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/despues-b.jpg" -->
+          <img src="img/foto-despues-2.jpg" alt="Después Punto B"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div style="display:none;flex-direction:column;align-items:center;gap:8px;color:#3d5447;">
+            <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <circle cx="12" cy="12" r="3.5"/>
+              <path d="M8.5 5.5V4a1 1 0 011-1h5a1 1 0 011 1v1.5"/>
+            </svg>
+            <span class="ph-label">foto-despues-2.jpg</span>
+          </div>
         </div>
         <div class="photo-meta">
           <div class="photo-location">Zona / Punto B</div>
           <div class="lux-row">
-            <span class="lux-val after-lux" id="lux-a2" onclick="editLux(this)">— </span>
-            <span class="lux-unit">lux · (clic para editar)</span>
+            <!-- REEMPLAZA el número por tu valor de lux real -->
+            <span class="lux-val after-lux" id="lux-a2">160 </span>
+            <span class="lux-unit">lux</span>
           </div>
         </div>
       </div>
@@ -847,40 +956,25 @@
         <div class="sensor-desc">Detecta presencia a nivel de piso en instalaciones medianas</div>
       </div>
       <div class="sensor-body">
-        <!-- SVG Cone 15m -->
         <svg class="cone-diagram" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
-          <!-- ceiling -->
           <rect x="60" y="0" width="100" height="8" rx="3" fill="#1e2a25"/>
-          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Luminaria</text>
-          <!-- fixture -->
+          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Luminaria</text>
           <rect x="95" y="8" width="30" height="10" rx="2" fill="#2a3d32"/>
           <circle cx="110" cy="13" r="5" fill="#f5c842" opacity="0.7"/>
-
-          <!-- detection cone 15m (narrower) -->
           <polygon points="110,18 68,155 152,155" fill="rgba(245,200,66,0.07)" stroke="#f5c842" stroke-width="1" stroke-dasharray="4,3"/>
-
-          <!-- height arrow -->
           <line x1="40" y1="18" x2="40" y2="155" stroke="#3d5447" stroke-width="1"/>
           <line x1="34" y1="18" x2="46" y2="18" stroke="#3d5447" stroke-width="1"/>
           <line x1="34" y1="155" x2="46" y2="155" stroke="#3d5447" stroke-width="1"/>
-          <text x="33" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="DM Sans" transform="rotate(-90,33,92)">≤ 15 m</text>
-
-          <!-- person -->
+          <text x="33" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="Syne" transform="rotate(-90,33,92)">≤ 15 m</text>
           <circle cx="110" cy="148" r="5" fill="#f5c842" opacity="0.8"/>
           <line x1="110" y1="153" x2="110" y2="165" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
           <line x1="110" y1="157" x2="104" y2="162" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
           <line x1="110" y1="157" x2="116" y2="162" stroke="#f5c842" stroke-width="2" opacity="0.8"/>
-
-          <!-- detection ok badge -->
           <circle cx="155" cy="148" r="10" fill="rgba(245,200,66,0.15)" stroke="#f5c842" stroke-width="1"/>
           <text x="155" y="152" text-anchor="middle" fill="#f5c842" font-size="10">✓</text>
-
-          <!-- floor line -->
           <line x1="50" y1="168" x2="170" y2="168" stroke="#1e2a25" stroke-width="2"/>
-
-          <!-- width label -->
           <line x1="68" y1="172" x2="152" y2="172" stroke="#3d5447" stroke-width="1"/>
-          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Cono de detección</text>
+          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Cono de detección</text>
         </svg>
 
         <div class="sensor-specs">
@@ -912,43 +1006,26 @@
         <div class="sensor-desc">Diseñado para naves industriales de gran altura de montaje</div>
       </div>
       <div class="sensor-body">
-        <!-- SVG Cone 20m -->
         <svg class="cone-diagram" viewBox="0 0 220 180" xmlns="http://www.w3.org/2000/svg">
-          <!-- ceiling -->
           <rect x="60" y="0" width="100" height="8" rx="3" fill="#1e2a25"/>
-          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Luminaria</text>
-          <!-- fixture -->
+          <text x="110" y="6" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Luminaria</text>
           <rect x="95" y="8" width="30" height="10" rx="2" fill="#1a3328"/>
           <circle cx="110" cy="13" r="5" fill="#2dda7f" opacity="0.8"/>
-
-          <!-- detection cone 20m (wider spread) -->
           <polygon points="110,18 48,155 172,155" fill="rgba(45,218,127,0.07)" stroke="#2dda7f" stroke-width="1" stroke-dasharray="4,3"/>
-
-          <!-- inner focused beam -->
           <polygon points="110,18 82,155 138,155" fill="rgba(45,218,127,0.05)" stroke="rgba(45,218,127,0.3)" stroke-width="0.5"/>
-
-          <!-- height arrow -->
           <line x1="30" y1="18" x2="30" y2="155" stroke="#3d5447" stroke-width="1"/>
           <line x1="24" y1="18" x2="36" y2="18" stroke="#3d5447" stroke-width="1"/>
           <line x1="24" y1="155" x2="36" y2="155" stroke="#3d5447" stroke-width="1"/>
-          <text x="23" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="DM Sans" transform="rotate(-90,23,92)">hasta 20 m</text>
-
-          <!-- person -->
+          <text x="23" y="92" text-anchor="middle" fill="#7a9a87" font-size="9" font-family="Syne" transform="rotate(-90,23,92)">hasta 20 m</text>
           <circle cx="110" cy="148" r="5" fill="#2dda7f" opacity="0.8"/>
           <line x1="110" y1="153" x2="110" y2="165" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
           <line x1="110" y1="157" x2="104" y2="162" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
           <line x1="110" y1="157" x2="116" y2="162" stroke="#2dda7f" stroke-width="2" opacity="0.8"/>
-
-          <!-- detection ok badge -->
           <circle cx="160" cy="148" r="10" fill="rgba(45,218,127,0.15)" stroke="#2dda7f" stroke-width="1"/>
           <text x="160" y="152" text-anchor="middle" fill="#2dda7f" font-size="10">✓</text>
-
-          <!-- floor line -->
           <line x1="38" y1="168" x2="182" y2="168" stroke="#1e2a25" stroke-width="2"/>
-
-          <!-- width label -->
           <line x1="48" y1="172" x2="172" y2="172" stroke="#3d5447" stroke-width="1"/>
-          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Mayor cobertura</text>
+          <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Mayor cobertura</text>
         </svg>
 
         <div class="sensor-specs">
@@ -971,7 +1048,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <!-- Alert / contexto instalación actual -->
@@ -988,78 +1064,73 @@
   </div>
 
   <div class="solution-box">
-    <div class="alert-icon">💡</div>
-    <div>
-      <div class="solution-title">Solución disponible</div>
-      <div class="solution-text">
-        Optima Energía cuenta con sensores específicos para alturas de hasta 20 m. Para la próxima fase o para ajustar esta instalación, se puede reemplazar únicamente el módulo sensor, sin necesidad de cambiar las luminarias. Esto garantiza una detección confiable y maximiza el ahorro energético por encendido automático.
-      </div>
+  <div class="alert-icon">💡</div>
+  <div>
+    <div class="solution-title">Solución para esta instalación</div>
+    <div class="solution-text">
+      La solución para esta área es instalar las luminarias a la altura especificada por Óptima Energía en el documento técnico de instalación, de manera que los equipos operen dentro de sus condiciones normales y el sensor detecte correctamente el paso de personas.
     </div>
   </div>
+</div>
+
+<div class="solution-box" style="margin-top:12px; border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.05);">
+  <div class="alert-icon">🏗️</div>
+  <div>
+    <div class="solution-title" style="color: #60a5fa;">Proyecto global de iluminación</div>
+    <div class="solution-text">
+      Para las áreas donde la altura de montaje supere los 15 m de forma inevitable, Óptima Energía dispone de sensores de gran altura con detección de hasta 20 m. En la ejecución del proyecto global, estas zonas serán atendidas con la configuración de sensor adecuada, garantizando detección confiable y máximo ahorro energético en toda la instalación.
+    </div>
+  </div>
+</div>
 
   <!-- Height visual comparison -->
   <div class="height-compare">
     <div class="height-compare-title">Comparativa visual: rango de detección por altura de montaje</div>
     <svg viewBox="0 0 500 160" style="width:100%;max-width:560px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg">
-      <!-- Background -->
       <rect width="500" height="160" fill="transparent"/>
-
-      <!-- LEFT: 15m OK -->
-      <text x="110" y="15" text-anchor="middle" fill="#f5c842" font-size="10" font-family="DM Sans" font-weight="600">SENSOR ESTÁNDAR · 15 m</text>
-
-      <!-- pole 15m -->
+      <text x="110" y="15" text-anchor="middle" fill="#f5c842" font-size="10" font-family="Syne" font-weight="600">SENSOR ESTÁNDAR · 15 m</text>
       <line x1="110" y1="22" x2="110" y2="110" stroke="#1e2a25" stroke-width="3"/>
-      <!-- luminaria -->
       <rect x="98" y="18" width="24" height="8" rx="2" fill="#2a3d32"/>
       <circle cx="110" cy="22" r="4" fill="#f5c842" opacity="0.9"/>
-      <!-- cone 15m -->
       <polygon points="110,26 74,108 146,108" fill="rgba(245,200,66,0.1)" stroke="#f5c842" stroke-width="1.2" stroke-dasharray="4,2"/>
-      <!-- ground -->
       <line x1="50" y1="118" x2="170" y2="118" stroke="#1e2a25" stroke-width="2"/>
-      <!-- height line -->
       <line x1="60" y1="22" x2="60" y2="110" stroke="#3d5447" stroke-width="0.8"/>
-      <text x="54" y="70" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans" transform="rotate(-90,54,70)">15 m</text>
-      <!-- person in cone: OK -->
+      <text x="54" y="70" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne" transform="rotate(-90,54,70)">15 m</text>
       <circle cx="110" cy="103" r="4" fill="#f5c842"/>
       <line x1="110" y1="107" x2="110" y2="115" stroke="#f5c842" stroke-width="1.5"/>
-      <!-- check -->
       <text x="155" y="100" fill="#f5c842" font-size="14">✓</text>
-      <text x="85" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Detecta correctamente</text>
-      <text x="135" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans"> </text>
-
-      <!-- DIVIDER -->
+      <text x="85" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Detecta correctamente</text>
       <line x1="250" y1="10" x2="250" y2="145" stroke="#1e2a25" stroke-width="1" stroke-dasharray="4,4"/>
-
-      <!-- RIGHT: Installed too high - NO detect -->
-      <text x="375" y="15" text-anchor="middle" fill="#ff8c8c" font-size="10" font-family="DM Sans" font-weight="600">SENSOR ESTÁNDAR · &gt;15 m ✗</text>
-
-      <!-- pole too high -->
+      <text x="375" y="15" text-anchor="middle" fill="#ff8c8c" font-size="10" font-family="Syne" font-weight="600">SENSOR ESTÁNDAR · &gt;15 m ✗</text>
       <line x1="375" y1="22" x2="375" y2="110" stroke="#1e2a25" stroke-width="3"/>
-      <!-- luminaria higher -->
       <rect x="363" y="18" width="24" height="8" rx="2" fill="#2a3d32"/>
       <circle cx="375" cy="22" r="4" fill="#ff5e5e" opacity="0.7"/>
-      <!-- cone 15m but mounted at 20m - short reach -->
       <polygon points="375,26 354,80 396,80" fill="rgba(255,94,94,0.08)" stroke="#ff5e5e" stroke-width="1.2" stroke-dasharray="4,2"/>
-      <!-- gap indication -->
       <line x1="370" y1="80" x2="370" y2="110" stroke="#3d5447" stroke-width="1" stroke-dasharray="2,2"/>
-      <text x="403" y="96" fill="#ff8c8c" font-size="8" font-family="DM Sans">Zona</text>
-      <text x="403" y="106" fill="#ff8c8c" font-size="8" font-family="DM Sans">ciega</text>
-      <!-- ground -->
+      <text x="403" y="96" fill="#ff8c8c" font-size="8" font-family="Syne">Zona</text>
+      <text x="403" y="106" fill="#ff8c8c" font-size="8" font-family="Syne">ciega</text>
       <line x1="315" y1="118" x2="435" y2="118" stroke="#1e2a25" stroke-width="2"/>
-      <!-- person outside cone: NOT detected -->
       <circle cx="375" cy="103" r="4" fill="#555" opacity="0.6"/>
       <line x1="375" y1="107" x2="375" y2="115" stroke="#555" stroke-width="1.5" opacity="0.6"/>
-      <!-- X -->
       <text x="420" y="100" fill="#ff5e5e" font-size="14">✗</text>
-      <text x="345" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="DM Sans">Persona fuera del cono</text>
+      <text x="345" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Persona fuera del cono</text>
     </svg>
   </div>
 
 </section>
 
-<!-- FOOTER -->
+<!-- =====================================================
+     FOOTER
+     CAMBIO 5: reemplaza src del img por la ruta de tu logo.
+     Si no tienes logo, descomenta el div .footer-brand-text.
+     ===================================================== -->
 <footer>
-  <div class="footer-brand">Optima Energía</div>
+  <div class="footer-brand">
+    <img src="img/logo_optima.png" alt="Optima Energía">
+    <!-- Si no tienes el archivo de logo todavía, usa esto:
+    <div class="footer-brand-text">Optima Energía</div>
+    -->
+  </div>
   <div class="footer-note">Informe confidencial · Prueba piloto 2025 · Datos registrados por medidor instalado in situ</div>
 </footer>
 
@@ -1085,13 +1156,26 @@ const measured = [
 
 const baseline = Array(48).fill(116.64);
 
+// === COLORES POR FASE ===
+// Fase 1: índices 0–16  (13-29 ago) → verde
+// Fase 2: índices 17–23 (30 ago-5 sep) → ámbar
+// Fase 3: índices 24–47 (6-29 sep) → azul
+function phaseColor(i) {
+  if (i < 17) return '#2dda7f';
+  if (i < 24) return '#f5c842';
+  return '#60a5fa';
+}
+
+function phaseColorAlpha(i, alpha) {
+  if (i < 17) return `rgba(45,218,127,${alpha})`;
+  if (i < 24) return `rgba(245,200,66,${alpha})`;
+  return `rgba(96,165,250,${alpha})`;
+}
+
 // === CHART ===
 const ctx = document.getElementById('energyChart').getContext('2d');
 
-const gradGreen = ctx.createLinearGradient(0, 0, 0, 380);
-gradGreen.addColorStop(0, 'rgba(45,218,127,0.25)');
-gradGreen.addColorStop(1, 'rgba(45,218,127,0)');
-
+// CAMBIO 2: gradiente de sombra por segmentos usando plugin personalizado
 new Chart(ctx, {
   type: 'line',
   data: {
@@ -1111,15 +1195,21 @@ new Chart(ctx, {
       {
         label: 'Consumo medido',
         data: measured,
-        borderColor: '#2dda7f',
         borderWidth: 2.5,
         pointRadius: 3,
-        pointBackgroundColor: '#2dda7f',
         pointHoverRadius: 6,
         fill: true,
-        backgroundColor: gradGreen,
         tension: 0.35,
-        order: 1
+        order: 1,
+        // Colores por segmento: línea
+        segment: {
+          borderColor: ctx => phaseColor(ctx.p0DataIndex),
+          backgroundColor: ctx => phaseColorAlpha(ctx.p0DataIndex, 0.15)
+        },
+        // Color inicial para puntos (se sobreescribe con plugin)
+        borderColor: '#2dda7f',
+        backgroundColor: 'rgba(45,218,127,0.10)',
+        pointBackgroundColor: ctx => phaseColor(ctx.dataIndex),pointBorderColor: ctx => phaseColor(ctx.dataIndex),
       }
     ]
   },
@@ -1136,17 +1226,36 @@ new Chart(ctx, {
         titleColor: '#e8f0ec',
         bodyColor: '#7a9a87',
         titleFont: { family: 'Syne', weight: '700', size: 13 },
-        bodyFont: { family: 'DM Sans', size: 12 },
+        bodyFont: { family: 'Syne', size: 12 },
         padding: 12,
         callbacks: {
-          label: ctx => {
-            const val = ctx.parsed.y;
-            const label = ctx.dataset.label;
-            if (label.includes('base')) return `  Línea base: ${val.toFixed(1)} kWh`;
-            const saving = ((116.64 - val) / 116.64 * 100).toFixed(0);
-            return [`  Consumo: ${val.toFixed(1)} kWh`, `  Ahorro vs base: ${saving}%`];
-          }
-        }
+  label: ctx => {
+    const val = ctx.parsed.y;
+    const label = ctx.dataset.label;
+    const i = ctx.dataIndex;
+
+    if (label.includes('base')) return `  Línea base: ${val.toFixed(1)} kWh`;
+
+    // Fase 1 (verde): sin ahorro
+    if (i < 17) {
+      return `  Consumo: ${val.toFixed(1)} kWh`;
+    }
+
+    // Promedio fase 1 (índices 0-16)
+    const fase1 = measured.slice(0, 17);
+    const promedioFase1 = (fase1.reduce((a, b) => a + b, 0) / fase1.length);
+
+    const ahorroVsBase = ((116.64 - val) / 116.64 * 100).toFixed(0);
+    const ahorroVsFase1 = ((promedioFase1 - val) / promedioFase1 * 100).toFixed(0);
+
+    // Fase 2 y 3: muestra ambos ahorros
+    return [
+      `  Consumo: ${val.toFixed(1)} kWh`,
+      `  Ahorro vs línea base: ${ahorroVsBase}%`,
+      `  Ahorro vs fase arranque: ${ahorroVsFase1}%`
+    ];
+  }
+}
       }
     },
     scales: {
@@ -1154,7 +1263,7 @@ new Chart(ctx, {
         grid: { color: '#1e2a25', drawBorder: false },
         ticks: {
           color: '#7a9a87',
-          font: { family: 'DM Sans', size: 10 },
+          font: { family: 'Syne', size: 10 },
           maxRotation: 45,
           maxTicksLimit: 16
         }
@@ -1163,7 +1272,7 @@ new Chart(ctx, {
         grid: { color: '#1e2a25', drawBorder: false },
         ticks: {
           color: '#7a9a87',
-          font: { family: 'DM Sans', size: 11 },
+          font: { family: 'Syne', size: 11 },
           callback: v => v + ' kWh'
         },
         min: 0,
@@ -1172,36 +1281,6 @@ new Chart(ctx, {
     }
   }
 });
-
-// === FOTO UPLOAD ===
-function loadPhoto(event, placeholderId) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const ph = document.getElementById(placeholderId);
-    // Remove text/icon
-    const svg = ph.querySelector('svg');
-    const span = ph.querySelector('span');
-    if (svg) svg.style.display = 'none';
-    if (span) span.style.display = 'none';
-    // Add image
-    let img = ph.querySelector('img');
-    if (!img) { img = document.createElement('img'); ph.appendChild(img); }
-    img.src = e.target.result;
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:0;';
-  };
-  reader.readAsDataURL(file);
-}
-
-// === LUX EDIT ===
-function editLux(el) {
-  const current = el.textContent.replace(/[^0-9]/g, '') || '';
-  const val = prompt('Ingresa el valor en lux:', current);
-  if (val !== null && val.trim() !== '') {
-    el.textContent = parseInt(val).toLocaleString('es-CO') + ' ';
-  }
-}
 </script>
 </body>
 </html>
