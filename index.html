@@ -14,7 +14,7 @@
   font-weight: 100 900;
   font-style: normal;
 }
-
+ 
   :root {
     --bg: #0b0f0e;
     --surface: #111714;
@@ -33,9 +33,9 @@
     --radius-sm: 8px;
     --font-hero: 'HERO', 'Syne', sans-serif;
   }
-
+ 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   body {
     background: var(--bg);
     color: var(--text);
@@ -45,7 +45,7 @@
     line-height: 1.6;
     min-height: 100vh;
   }
-
+ 
   /* NAV */
   nav {
     position: sticky;
@@ -60,19 +60,19 @@
     justify-content: space-between;
     height: 60px;
   }
-
+ 
   .nav-logo {
     display: flex;
     align-items: center;
     height: 110px;
   }
-
+ 
   .nav-logo img {
     height: 110px;
     width: auto;
     display: block;
   }
-
+ 
   /* Fallback texto si no hay logo */
   .nav-logo-text {
     font-family: var(--font-hero);
@@ -81,9 +81,9 @@
     letter-spacing: -0.02em;
     color: var(--green);
   }
-
+ 
   .nav-logo-text span { color: var(--text-muted); font-weight: 400; }
-
+ 
   .nav-badge {
     font-size: 0.7rem;
     font-weight: 500;
@@ -95,14 +95,14 @@
     letter-spacing: 0.05em;
     text-transform: uppercase;
   }
-
+ 
   /* HERO */
   .hero {
     padding: clamp(40px, 6vw, 80px) clamp(16px, 4vw, 48px) clamp(24px, 4vw, 48px);
     position: relative;
     overflow: hidden;
   }
-
+ 
   .hero::before {
     content: '';
     position: absolute;
@@ -111,7 +111,7 @@
     background: radial-gradient(circle, rgba(45,218,127,0.07) 0%, transparent 70%);
     pointer-events: none;
   }
-
+ 
   .hero-label {
     font-size: 0.72rem;
     letter-spacing: 0.12em;
@@ -120,7 +120,7 @@
     font-weight: 500;
     margin-bottom: 12px;
   }
-
+ 
   .hero h1 {
     font-family: var(--font-hero);
     font-weight: 800;
@@ -131,12 +131,12 @@
     max-width: 700px;
     margin-bottom: 16px;
   }
-
+ 
   .hero h1 em {
     font-style: normal;
     color: var(--green);
   }
-
+ 
   .hero-sub {
     color: var(--text-muted);
     font-size: clamp(0.9rem, 2vw, 1.05rem);
@@ -144,7 +144,7 @@
     font-weight: 300;
     margin-bottom: 32px;
   }
-
+ 
   .hero-meta {
     display: flex;
     flex-wrap: wrap;
@@ -152,9 +152,9 @@
     font-size: 0.8rem;
     color: var(--text-dim);
   }
-
+ 
   .hero-meta span { color: var(--text-muted); }
-
+ 
   /* KPI ROW */
   .kpi-row {
     display: grid;
@@ -162,7 +162,7 @@
     gap: 16px;
     padding: 0 clamp(16px, 4vw, 48px) clamp(32px, 4vw, 48px);
   }
-
+ 
   .kpi {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -172,9 +172,9 @@
     overflow: hidden;
     transition: border-color 0.2s;
   }
-
+ 
   .kpi:hover { border-color: var(--green-dim); }
-
+ 
   .kpi::after {
     content: '';
     position: absolute;
@@ -184,9 +184,9 @@
     opacity: 0;
     transition: opacity 0.2s;
   }
-
+ 
   .kpi:hover::after { opacity: 1; }
-
+ 
   .kpi-label {
     font-size: 0.72rem;
     text-transform: uppercase;
@@ -195,7 +195,7 @@
     margin-bottom: 8px;
     font-weight: 500;
   }
-
+ 
   .kpi-value {
     font-family: var(--font-hero);
     font-weight: 700;
@@ -204,20 +204,20 @@
     color: var(--text);
     margin-bottom: 4px;
   }
-
+ 
   .kpi-value.accent { color: var(--green); }
   .kpi-value.amber { color: var(--amber); }
-
+ 
   .kpi-sub {
     font-size: 0.75rem;
     color: var(--text-dim);
   }
-
+ 
   /* SECTION */
   section {
     padding: 0 clamp(16px, 4vw, 48px) clamp(40px, 5vw, 64px);
   }
-
+ 
   .section-header {
     display: flex;
     align-items: baseline;
@@ -225,20 +225,20 @@
     margin-bottom: 24px;
     flex-wrap: wrap;
   }
-
+ 
   .section-title {
     font-family: var(--font-hero);
     font-weight: 700;
     font-size: clamp(1.1rem, 2.5vw, 1.5rem);
     letter-spacing: -0.02em;
   }
-
+ 
   .section-note {
     font-size: 0.78rem;
     color: var(--text-muted);
     font-style: italic;
   }
-
+ 
   /* CHART */
   .chart-card {
     background: var(--surface);
@@ -247,14 +247,14 @@
     padding: clamp(16px, 3vw, 28px);
     position: relative;
   }
-
+ 
   .chart-legend {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
   }
-
+ 
   .legend-item {
     display: flex;
     align-items: center;
@@ -263,28 +263,28 @@
     font-size: 0.78rem;
     color: var(--text-muted);
   }
-
+ 
   .legend-line {
     width: 28px;
     height: 3px;
     border-radius: 2px;
   }
-
+ 
   .legend-line.baseline {
     background: var(--amber);
     border: none;
   }
-
+ 
   /* CAMBIO 2: leyendas de fases con sus colores */
   .legend-line.phase1 { background: var(--green); }
   .legend-line.phase2 { background: var(--amber); }
   .legend-line.phase3 { background: var(--blue); }
-
+ 
   .chart-wrapper {
     position: relative;
     height: clamp(260px, 40vw, 380px);
   }
-
+ 
   /* CAMBIO 3: labels antes/después sobre la gráfica */
   .chart-label-before {
     position: absolute;
@@ -301,7 +301,7 @@
     border-radius: 4px;
     border-left: 2px solid var(--amber);
   }
-
+ 
   .chart-label-after {
     position: absolute;
     top: 8px;
@@ -318,7 +318,7 @@
     border-radius: 4px;
     border-right: 2px solid var(--green);
   }
-
+ 
   /* PHASE LABELS */
   .phase-tags {
   display: flex;
@@ -327,7 +327,7 @@
   margin-top: 14px;
   justify-content: center;
 }
-
+ 
   .phase-tag {
     font-size: 0.7rem;
     padding: 3px 10px;
@@ -335,12 +335,12 @@
     font-weight: 500;
     letter-spacing: 0.04em;
   }
-
+ 
   /* CAMBIO 2: colores de phase-tags alineados con colores de gráfica */
   .phase-tag.p1 { background: rgba(45,218,127,0.1); color: var(--green); border: 1px solid rgba(45,218,127,0.25); }
   .phase-tag.p2 { background: rgba(245,200,66,0.1); color: var(--amber); border: 1px solid rgba(245,200,66,0.25); }
   .phase-tag.p3 { background: rgba(96,165,250,0.1); color: var(--blue); border: 1px solid rgba(96,165,250,0.25); }
-
+ 
   /* BEFORE AFTER */
   .ba-grid {
     display: grid;
@@ -349,13 +349,13 @@
     margin: 0 auto;
     gap: 24px;
   }
-
+ 
   @media (max-width: 600px) {
     .ba-grid { grid-template-columns: 1fr; }
   }
-
+ 
   .ba-col { display: flex; flex-direction: column; gap: 32px; }
-
+ 
   .ba-header {
     display: flex;
     align-items: center;
@@ -368,28 +368,28 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
   }
-
+ 
   .ba-header.before {
     background: rgba(255,94,94,0.08);
     border: 1px solid rgba(255,94,94,0.2);
     color: #ff8c8c;
   }
-
+ 
   .ba-header.after {
     background: rgba(45,218,127,0.08);
     border: 1px solid rgba(45,218,127,0.2);
     color: var(--green);
   }
-
+ 
   .ba-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
   }
-
+ 
   .ba-dot.before { background: #ff8c8c; }
   .ba-dot.after { background: var(--green); }
-
+ 
   .photo-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -397,9 +397,9 @@
     overflow: hidden;
     transition: border-color 0.2s;
   }
-
+ 
   .photo-card:hover { border-color: var(--green-dim); }
-
+ 
   /* CAMBIO 4: photo-placeholder ahora muestra imagen fija */
   .photo-placeholder {
     height: 500px;
@@ -415,7 +415,7 @@
     position: relative;
     overflow: hidden;
   }
-
+ 
   .photo-placeholder img {
     position: absolute;
     inset: 0;
@@ -423,23 +423,23 @@
     height: 100%;
     object-fit: cover;
   }
-
+ 
   /* Icono de placeholder cuando no hay imagen */
   .photo-placeholder .ph-icon {
     opacity: 0.25;
     width: 40px;
     height: 40px;
   }
-
+ 
   .photo-placeholder .ph-label {
     color: var(--text-dim);
     font-size: 0.78rem;
   }
-
+ 
   .photo-meta {
     padding: 12px 16px;
   }
-
+ 
   .photo-location {
     font-size: 0.72rem;
     text-transform: uppercase;
@@ -448,39 +448,70 @@
     margin-bottom: 4px;
     font-weight: 500;
   }
-
+ 
   .lux-row {
     display: flex;
     align-items: baseline;
     gap: 8px;
   }
-
+ 
   .lux-val {
     font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1.3rem;
     color: var(--text);
   }
-
+ 
   .lux-val.before-lux { color: #ff8c8c; }
   .lux-val.after-lux { color: var(--green); }
-
+ 
   .lux-unit {
     font-size: 0.75rem;
     color: var(--text-muted);
   }
-
+ 
+  /* RETILAP BADGES */
+  .retilap-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-hero);
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+  }
+ 
+  .retilap-badge.no-cumple {
+    background: rgba(255,94,94,0.15);
+    border: 1.5px solid rgba(255,94,94,0.4);
+    color: #ff6b6b;
+  }
+ 
+  .retilap-badge.cumple {
+    background: rgba(45,218,127,0.15);
+    border: 1.5px solid rgba(45,218,127,0.4);
+    color: var(--green);
+  }
+ 
+  .retilap-badge .badge-icon {
+    font-size: 0.9rem;
+  }
+ 
   /* SENSOR SECTION */
   .sensor-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
   }
-
+ 
   @media (max-width: 700px) {
     .sensor-grid { grid-template-columns: 1fr; }
   }
-
+ 
   .sensor-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -488,18 +519,18 @@
     overflow: hidden;
     transition: border-color 0.25s, transform 0.2s;
   }
-
+ 
   .sensor-card:hover {
     border-color: var(--green-dim);
     transform: translateY(-2px);
   }
-
+ 
   .sensor-head {
     background: var(--surface2);
     padding: 18px 20px 14px;
     border-bottom: 1px solid var(--border);
   }
-
+ 
   .sensor-badge {
     display: inline-flex;
     align-items: center;
@@ -512,36 +543,36 @@
     border-radius: 20px;
     margin-bottom: 10px;
   }
-
+ 
   .sensor-badge.standard {
     background: rgba(245,200,66,0.1);
     color: var(--amber);
     border: 1px solid rgba(245,200,66,0.3);
   }
-
+ 
   .sensor-badge.extended {
     background: rgba(45,218,127,0.1);
     color: var(--green);
     border: 1px solid rgba(45,218,127,0.3);
   }
-
+ 
   .sensor-name {
     font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1.05rem;
     margin-bottom: 4px;
   }
-
+ 
   .sensor-desc {
     font-size: 0.78rem;
     color: var(--text-muted);
     font-style: italic;
   }
-
+ 
   .sensor-body {
     padding: 18px 20px;
   }
-
+ 
   /* SVG CONE DIAGRAM */
   .cone-diagram {
     width: 100%;
@@ -549,20 +580,20 @@
     margin: 0 auto 16px;
     display: block;
   }
-
+ 
   .sensor-specs {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
-
+ 
   .spec-item {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 10px 12px;
   }
-
+ 
   .spec-label {
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -570,16 +601,16 @@
     color: var(--text-muted);
     margin-bottom: 4px;
   }
-
+ 
   .spec-value {
     font-family: var(--font-hero);
     font-weight: 700;
     font-size: 1rem;
     color: var(--text);
   }
-
+ 
   .spec-value.highlight { color: var(--green); }
-
+ 
   /* ALERT BOX */
   .alert-box {
     background: rgba(255,94,94,0.06);
@@ -591,26 +622,27 @@
     align-items: flex-start;
     margin-top: 20px;
   }
-
+ 
   .alert-icon {
     font-size: 1.3rem;
     flex-shrink: 0;
     line-height: 1.4;
   }
-
+ 
   .alert-text {
-    font-size: 0.82rem;
+    font-size: 0.97rem;
     color: var(--text-muted);
-    line-height: 1.65;
+    line-height: 1.7;
   }
-
+ 
   .alert-title {
-    font-weight: 600;
+    font-weight: 700;
     color: #ff8c8c;
-    margin-bottom: 4px;
-    font-size: 0.85rem;
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
   }
-
+ 
   .solution-box {
     background: rgba(45,218,127,0.05);
     border: 1px solid rgba(45,218,127,0.15);
@@ -621,20 +653,21 @@
     align-items: flex-start;
     margin-top: 12px;
   }
-
+ 
   .solution-text {
-    font-size: 0.82rem;
+    font-size: 0.97rem;
     color: var(--text-muted);
-    line-height: 1.65;
+    line-height: 1.7;
   }
-
+ 
   .solution-title {
-    font-weight: 600;
+    font-weight: 700;
     color: var(--green);
-    margin-bottom: 4px;
-    font-size: 0.85rem;
+    margin-bottom: 6px;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
   }
-
+ 
   /* HEIGHT ILLUSTRATION */
   .height-compare {
     background: var(--surface);
@@ -643,7 +676,7 @@
     padding: 20px;
     margin-top: 20px;
   }
-
+ 
   .height-compare-title {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -651,7 +684,7 @@
     color: var(--text-muted);
     margin-bottom: 16px;
   }
-
+ 
   /* FOOTER */
   footer {
     border-top: 1px solid var(--border);
@@ -662,19 +695,19 @@
     flex-wrap: wrap;
     gap: 12px;
   }
-
+ 
   .footer-brand {
     display: flex;
     align-items: center;
     height: 32px;
   }
-
+ 
   .footer-brand img {
     height: 90px;
     width: auto;
     display: block;
   }
-
+ 
   /* Fallback texto footer si no hay logo */
   .footer-brand-text {
     font-family: var(--font-hero);
@@ -682,37 +715,37 @@
     font-size: 0.9rem;
     color: var(--green);
   }
-
+ 
   .footer-note {
     font-size: 0.72rem;
     color: var(--text-dim);
   }
-
+ 
   /* DIVIDER */
   .divider {
     border: none;
     border-top: 1px solid var(--border);
     margin: 0 clamp(16px, 4vw, 48px) clamp(32px, 4vw, 48px);
   }
-
+ 
   /* ANIMATE */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
-
+ 
   .fade-up {
     animation: fadeUp 0.5s ease both;
   }
-
+ 
   .fade-up:nth-child(1) { animation-delay: 0.05s; }
   .fade-up:nth-child(2) { animation-delay: 0.1s; }
   .fade-up:nth-child(3) { animation-delay: 0.15s; }
   .fade-up:nth-child(4) { animation-delay: 0.2s; }
-
+ 
   /* TOOLTIP */
   canvas { cursor: crosshair; }
-
+ 
   /* RESPONSIVE TWEAKS */
   @media (max-width: 480px) {
     .kpi-row { grid-template-columns: 1fr 1fr; }
@@ -722,7 +755,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- =====================================================
      NAV / HEADER
      CAMBIO 5: reemplaza el src del img por la ruta de tu logo.
@@ -738,7 +771,7 @@
   </div>
   <div class="nav-badge">Informe Piloto</div>
 </nav>
-
+ 
 <!-- HERO -->
 <div class="hero fade-up">
   <div class="hero-label">Prueba Piloto · Agosto – Septiembre 2025</div>
@@ -750,7 +783,7 @@
     <div>Frecuencia: <span>Registros horarios</span></div>
   </div>
 </div>
-
+ 
 <!-- KPIs -->
 <div class="kpi-row">
   <div class="kpi fade-up">
@@ -774,7 +807,7 @@
     <div class="kpi-sub">vs sistema instalado -equipos fundidos y operando al 25%-</div>
   </div>
 </div>
-
+ 
 <!-- CHART -->
 <section>
   <div class="section-header">
@@ -801,12 +834,12 @@
         <span>6–29 sep: Operación</span>
       </div>
     </div>
-
+ 
     <!-- CAMBIO 3: labels antes/después sobre la gráfica -->
     <div class="chart-wrapper">
       <canvas id="energyChart"></canvas>
     </div>
-
+ 
     <div class="phase-tags">
       <span class="phase-tag p1">⚡ 13–29 ago: Arranque del sistema</span>
       <span class="phase-tag p2">🔄 30 ago–5 sep: Transición / ajuste</span>
@@ -814,23 +847,28 @@
     </div>
   </div>
 </section>
-
+ 
 <hr class="divider">
-
+ 
 <section>
   <div class="section-header">
     <div class="section-title">Niveles de iluminación: Antes vs Después</div>
     <div class="section-note">Mediciones en luxes – mismos puntos de referencia</div>
   </div>
-
+ 
   <div class="ba-grid">
     <!-- ANTES -->
     <div class="ba-col">
-      <div class="ba-header before">
-        <div class="ba-dot before"></div>
-        Antes del proyecto
+      <div>
+        <div class="ba-header before">
+          <div class="ba-dot before"></div>
+          Antes del proyecto
+        </div>
+        <div class="retilap-badge no-cumple">
+          <span class="badge-icon">✗</span> No cumple RETILAP
+        </div>
       </div>
-
+ 
       <div class="photo-card">
         <div class="photo-placeholder" id="ph-before-1">
           <img src="img/foto-antes-1.jpg" alt="Antes Punto A"
@@ -853,7 +891,7 @@
           </div>
         </div>
       </div>
-
+ 
       <div class="photo-card">
         <div class="photo-placeholder" id="ph-before-2">
           <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/antes-b.jpg" -->
@@ -878,14 +916,19 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- DESPUÉS -->
     <div class="ba-col">
-      <div class="ba-header after">
-        <div class="ba-dot after"></div>
-        Después del proyecto
+      <div>
+        <div class="ba-header after">
+          <div class="ba-dot after"></div>
+          Después del proyecto
+        </div>
+        <div class="retilap-badge cumple">
+          <span class="badge-icon">✓</span> Cumple RETILAP
+        </div>
       </div>
-
+ 
       <div class="photo-card">
         <div class="photo-placeholder" id="ph-after-1">
           <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/despues-a.jpg" -->
@@ -909,7 +952,7 @@
           </div>
         </div>
       </div>
-
+ 
       <div class="photo-card">
         <div class="photo-placeholder" id="ph-after-2">
           <!-- REEMPLAZA src por la ruta de tu foto, ej: src="fotos/despues-b.jpg" -->
@@ -936,18 +979,18 @@
     </div>
   </div>
 </section>
-
+ 
 <hr class="divider">
-
+ 
 <!-- SENSORES -->
 <section>
   <div class="section-header">
     <div class="section-title">Sistema de sensores de presencia</div>
     <div class="section-note">Detección adaptada a la altura de montaje</div>
   </div>
-
+ 
   <div class="sensor-grid">
-
+ 
     <!-- SENSOR 15m -->
     <div class="sensor-card">
       <div class="sensor-head">
@@ -976,7 +1019,7 @@
           <line x1="68" y1="172" x2="152" y2="172" stroke="#3d5447" stroke-width="1"/>
           <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Cono de detección</text>
         </svg>
-
+ 
         <div class="sensor-specs">
           <div class="spec-item">
             <div class="spec-label">Altura máx.</div>
@@ -997,7 +1040,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- SENSOR 20m -->
     <div class="sensor-card">
       <div class="sensor-head">
@@ -1027,7 +1070,7 @@
           <line x1="48" y1="172" x2="172" y2="172" stroke="#3d5447" stroke-width="1"/>
           <text x="110" y="180" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Mayor cobertura</text>
         </svg>
-
+ 
         <div class="sensor-specs">
           <div class="spec-item">
             <div class="spec-label">Altura máx.</div>
@@ -1049,7 +1092,7 @@
       </div>
     </div>
   </div>
-
+ 
   <!-- Alert / contexto instalación actual -->
   <div class="alert-box">
     <div class="alert-icon">⚠️</div>
@@ -1062,7 +1105,7 @@
       </div>
     </div>
   </div>
-
+ 
   <div class="solution-box">
   <div class="alert-icon">💡</div>
   <div>
@@ -1072,7 +1115,7 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="solution-box" style="margin-top:12px; border-color: rgba(96,165,250,0.2); background: rgba(96,165,250,0.05);">
   <div class="alert-icon">🏗️</div>
   <div>
@@ -1082,7 +1125,7 @@
     </div>
   </div>
 </div>
-
+ 
   <!-- Height visual comparison -->
   <div class="height-compare">
     <div class="height-compare-title">Comparativa visual: rango de detección por altura de montaje</div>
@@ -1116,9 +1159,9 @@
       <text x="345" y="130" text-anchor="middle" fill="#7a9a87" font-size="8" font-family="Syne">Persona fuera del cono</text>
     </svg>
   </div>
-
+ 
 </section>
-
+ 
 <!-- =====================================================
      FOOTER
      CAMBIO 5: reemplaza src del img por la ruta de tu logo.
@@ -1133,7 +1176,7 @@
   </div>
   <div class="footer-note">Informe confidencial · Prueba piloto 2025 · Datos registrados por medidor instalado in situ</div>
 </footer>
-
+ 
 <script>
 // === DATOS ===
 const labels = [
@@ -1144,7 +1187,7 @@ const labels = [
   "14-sep","15-sep","16-sep","17-sep","18-sep","19-sep","20-sep","21-sep",
   "22-sep","23-sep","24-sep","25-sep","26-sep","27-sep","28-sep","29-sep"
 ];
-
+ 
 const measured = [
   20.95,70.72,70.77,70.75,70.60,70.62,70.72,70.69,
   70.71,70.70,70.70,70.01,69.76,69.88,69.87,69.82,
@@ -1153,9 +1196,9 @@ const measured = [
   33.61,58.64,60.94,61.10,62.78,60.23,61.42,36.30,
   55.30,61.44,63.13,61.92,66.36,61.04,25.09,22.13
 ];
-
+ 
 const baseline = Array(48).fill(116.64);
-
+ 
 // === COLORES POR FASE ===
 // Fase 1: índices 0–16  (13-29 ago) → verde
 // Fase 2: índices 17–23 (30 ago-5 sep) → ámbar
@@ -1165,16 +1208,16 @@ function phaseColor(i) {
   if (i < 24) return '#f5c842';
   return '#60a5fa';
 }
-
+ 
 function phaseColorAlpha(i, alpha) {
   if (i < 17) return `rgba(45,218,127,${alpha})`;
   if (i < 24) return `rgba(245,200,66,${alpha})`;
   return `rgba(96,165,250,${alpha})`;
 }
-
+ 
 // === CHART ===
 const ctx = document.getElementById('energyChart').getContext('2d');
-
+ 
 // CAMBIO 2: gradiente de sombra por segmentos usando plugin personalizado
 new Chart(ctx, {
   type: 'line',
@@ -1233,21 +1276,21 @@ new Chart(ctx, {
     const val = ctx.parsed.y;
     const label = ctx.dataset.label;
     const i = ctx.dataIndex;
-
+ 
     if (label.includes('base')) return `  Línea base: ${val.toFixed(1)} kWh`;
-
+ 
     // Fase 1 (verde): sin ahorro
     if (i < 17) {
       return `  Consumo: ${val.toFixed(1)} kWh`;
     }
-
+ 
     // Promedio fase 1 (índices 0-16)
     const fase1 = measured.slice(0, 17);
     const promedioFase1 = (fase1.reduce((a, b) => a + b, 0) / fase1.length);
-
+ 
     const ahorroVsBase = ((116.64 - val) / 116.64 * 100).toFixed(0);
     const ahorroVsFase1 = ((promedioFase1 - val) / promedioFase1 * 100).toFixed(0);
-
+ 
     // Fase 2 y 3: muestra ambos ahorros
     return [
       `  Consumo: ${val.toFixed(1)} kWh`,
@@ -1284,3 +1327,4 @@ new Chart(ctx, {
 </script>
 </body>
 </html>
+ 
